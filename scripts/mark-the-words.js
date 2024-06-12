@@ -30,6 +30,7 @@ H5P.MarkTheWords = (function ($, Question, Word, KeyboardNav, XapiGenerator) {
       textField: "This is a *nice*, *flexible* content type.",
       overallFeedback: [],
       behaviour: {
+        numLines: null,
         enableRetry: true,
         enableSolutionsButton: true,
         enableCheckButton: true,
@@ -197,7 +198,12 @@ H5P.MarkTheWords = (function ($, Question, Word, KeyboardNav, XapiGenerator) {
     var self = this;
     self.selectableWords = [];
     self.answers = 0;
-
+    
+    // If NumLines Parameter is properly set this will select a random set of paragraphs from the base textField parameter
+    if (!(this.params.behaviour.numLines <= 1 || this.params.behaviour.numLines >= this.params.textField.split('\n\n').length)) {
+      this.params.textField = this.params.textField.split('\n\n').sort(() => Math.random() - 0.5).slice(0, this.params.behaviour.numLines).join('\n\n')
+    }
+    
     // Wrapper
     var $wordContainer = $('<div/>', {
       'class': 'h5p-word-selectable-words',
